@@ -1,9 +1,9 @@
 ---
-name: five-levels
-description: Explain one topic at five levels, WIRED "5 Levels" style - ELI5 (child), ELIT (teen), ELIC (college), ELIP (PhD, replication-ready), ELIA (omniscient tutor, beyond the topic) - as one interactive, Brilliant-style local HTML file. Use when the user types five-levels with a topic (a concept or a paper) or asks for a layered explainer.
+name: eli5x
+description: Explain one topic at five levels, WIRED "5 Levels" style - ELI5 (child), ELIT (teen), ELIC (college), ELIP (PhD, replication-ready), ELIA (omniscient tutor, beyond the topic) - as one interactive, Brilliant-style local HTML file. Use when the user types eli5x with a topic (a concept or a paper) or asks for a layered explainer.
 ---
 
-# five-levels: five levels of one idea
+# eli5x: five levels of one idea
 
 Use the topic supplied in the user’s request.
 
@@ -135,7 +135,7 @@ If the topic is a paper (title, arXiv id, PDF, or link), read it first: fetch or
 ## Process
 
 1. Pin down the topic (read the paper if there is one). Write out the beat spine: ids and titles.
-2. Copy `template.html` into the current working directory as `five-levels-<slug>.html` (or wherever the user says). Set the title and the beat blocks for all five levels first, so the spine is identical everywhere.
+2. Copy `template.html` into the current working directory as `eli5x-<slug>.html` (or wherever the user says). Set the title and the beat blocks for all five levels first, so the spine is identical everywhere.
 3. Fill ELI5, then ELIT, ELIC, ELIP, ELIA in turn. Write each level by deepening the previous one, along with its test.
 4. Check, and fix anything that fails:
    - `grep -c '{{' file` is 0.

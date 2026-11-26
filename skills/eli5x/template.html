@@ -364,7 +364,7 @@ th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertic
 <script>
 /* ===== SHELL SCRIPT: tabs, locking, tests. KEEP. Put topic widgets in a separate <script> below. ===== */
 const FL=(()=>{
-  const KEY='five-levels:'+document.title;
+  const KEY='eli5x:'+document.title;
   const tabs=[...document.querySelectorAll('.tab')], pages=[...document.querySelectorAll('.page')];
   let st={passed:[],tab:0};
   try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&Array.isArray(s.passed))st={passed:s.passed,tab:+s.tab||0};}catch(e){}
