@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{TITLE}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600&family=JetBrains+Mono&display=swap">
+<style>
+/* ===== SHELL: do not change the rules marked KEEP ===== */
+:root{
+  --bg:#F5F0E3; --card:#FBF8F0; --ink:#2F2B22; --muted:#6F6758; --line:#E3DACB;
+  --accent:#C96442; --accent-soft:#F1DCCF; --gold:#D9A441; --good:#5B8A4F; --good-soft:#E3EDDA;
+  --serif:"Source Serif 4",Georgia,serif; --sans:"Inter",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+  color-scheme:light;
+}
+[hidden]{display:none!important}                    /* KEEP: makes `hidden` beat any display rule */
+*{box-sizing:border-box}
+html{scroll-padding-top:90px}                       /* KEEP: anchors land below the sticky tab bar */
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.62 var(--sans)}
+.wrap{max-width:760px;margin:0 auto;padding:28px 16px 72px}
+.kicker{margin:0;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600}
+h1{font-family:var(--serif);font-size:clamp(1.7rem,5vw,2.4rem);line-height:1.12;margin:4px 0}
+.sub{margin:0 0 14px;color:var(--muted)}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;padding:10px 0;border-bottom:1px solid var(--line);margin-bottom:22px}
+.tab{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 4px;display:grid;gap:1px;text-align:center;min-width:0}
+.tab b{font-family:var(--serif);font-size:1.05rem}
+.tab small{font-size:.68rem;color:var(--muted);line-height:1.2}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.tab[aria-selected="true"] small{color:#FBE9DF}
+.tab:disabled{cursor:not-allowed;opacity:.5}
+.tab:disabled b::before{content:"🔒 ";font-size:.8em}
+.page{display:grid;gap:22px}
+.hook{font-family:var(--serif);font-size:1.18rem;line-height:1.55;margin:0}
+.beat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;display:grid;gap:14px;min-width:0}
+.beat-h{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+.dots{display:inline-flex;gap:4px}
+.dots i{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--accent)}
+.dots i.on{background:var(--accent)}
+h2{font-family:var(--serif);font-weight:600;font-size:1.6rem;line-height:1.2;margin:0}
+h3{font-family:var(--serif);font-weight:600;font-size:1.15rem;margin:6px 0 0}
+.beat p,.beat ul,.beat ol{margin:0}
+figure{margin:0;display:grid;gap:8px;min-width:0}
+figure svg,canvas{width:100%;height:auto;display:block;background:var(--bg);border-radius:10px;border:1px solid var(--line)}
+figcaption{font-size:.88rem;color:var(--muted)}
+.bridge{margin:0;border-top:1px dashed var(--line);padding-top:12px;color:var(--accent);font-family:var(--serif);font-style:italic}
+.panel{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--bg);display:grid;gap:10px;min-width:0}
+.panel-h{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);font-weight:600}
+input[type=range]{accent-color:var(--accent);width:100%}
+.btn{font:inherit;font-weight:600;font-size:.92rem;border-radius:999px;padding:7px 16px;border:1.5px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer}
+.math-d{overflow-x:auto;overflow-y:hidden}
+pre{overflow-x:auto;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;font:12.5px/1.55 var(--mono);margin:0}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;font-size:.9rem;width:100%}
+th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+/* youtube card (shell fills the thumbnail) */
+.yt{margin:0;display:grid;gap:8px}
+.yt-thumb{position:relative;display:block;width:100%;aspect-ratio:16/9;padding:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#000;cursor:pointer}
+.yt-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.yt-play{position:absolute;inset:0;margin:auto;width:68px;height:48px;border-radius:12px;background:rgba(201,100,66,.92);color:#fff;font-size:22px;display:grid;place-items:center}
+.yt iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:10px;display:block}
+.yt figcaption b{color:var(--ink)}
+/* level test */
+.test{border:2px solid var(--accent);background:var(--card);border-radius:16px;padding:22px;display:grid;gap:16px}
+.prog{height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+.tq{display:grid;gap:8px;padding-top:14px;border-top:1px dashed var(--line)}
+.tq .q{font-weight:600;margin:0}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts button,.tq .check{font:inherit;font-size:.92rem;cursor:pointer;background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;color:var(--ink);text-align:left}
+.opts button.right{border-color:var(--good);background:var(--good-soft)}
+.opts button.wrong{border-color:var(--accent);background:var(--accent-soft)}
+.tq input[type=text],.tq textarea{font:inherit;padding:8px;border:1.5px solid var(--line);border-radius:10px;background:#fff;width:100%}
+.fb{margin:0;border-left:3px solid var(--gold);padding-left:12px;font-size:.93rem}
+.tq.done .fb{border-color:var(--good)}
+.pass{background:var(--accent-soft);border-radius:14px;padding:18px 22px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.pass p{margin:0;font-family:var(--serif);font-size:1.1rem;flex:1 1 240px}
+@media (max-width:480px){.beat,.test{padding:16px}.tab small{font-size:.6rem}h2{font-size:1.4rem}}
+</style>
+<!-- Math: MathJax SVG output. Self-contained (no CSS or font files), so it renders the same everywhere. KEEP. -->
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <p class="kicker">One idea · five levels</p>
+  <h1>{{TOPIC_QUESTION}}</h1>
+  <p class="sub">The same {{N_BEATS}} questions, asked five times, each time deeper.</p>
+
+  <nav class="tabs" role="tablist" aria-label="Level">
+    <button class="tab" role="tab"><b>ELI5</b><small>age five</small></button>
+    <button class="tab" role="tab"><b>ELIT</b><small>teenager</small></button>
+    <button class="tab" role="tab"><b>ELIC</b><small>college</small></button>
+    <button class="tab" role="tab"><b>ELIP</b><small>PhD</small></button>
+    <button class="tab" role="tab"><b>ELIA</b><small>ascended</small></button>
+  </nav>
+
+  <main>
+
+<!-- ================= LEVEL 0: ELI5 (age five) ================= -->
+<section class="page" data-lv="0" role="tabpanel" hidden>
+  <p class="hook">{{ELI5_HOOK}}</p>
+
+  <article class="beat" id="eli5-{{BEAT1_ID}}">
+    <div class="beat-h"><span class="dots"></span>Beat 1</div>
+    <h2>{{BEAT1_TITLE}}</h2>
+    <p>{{BEAT1_TEXT}}</p>
+    <figure><svg viewBox="0 0 640 260" role="img" aria-label="{{BEAT1_FIG_ALT}}"><!-- {{BEAT1_FIG}}: the same figure every level, more detailed each time --></svg><figcaption>{{BEAT1_CAPTION}}</figcaption></figure>
+    <div class="panel"><div class="panel-h">{{BEAT1_PANEL_LABEL}}</div><div id="eli5-w1"><!-- {{BEAT1_WIDGET}}: built by the TOPIC WIDGETS script; delete this panel if the beat has none --></div></div>
+    <!-- Optional YouTube video (see SKILL.md, Videos). Only IDs verified with oEmbed in this session. data-start is seconds.
+    <figure class="yt" data-id="VIDEO_ID" data-start="0"><figcaption><b>VIDEO TITLE</b> · CHANNEL · from 0:00. WHY THIS CLIP, FOR THIS LEVEL.</figcaption></figure>
+    -->
+    <p class="bridge">{{BEAT1_BRIDGE}}</p>
+  </article>
+  <article class="beat" id="eli5-{{BEAT2_ID}}">
+    <div class="beat-h"><span class="dots"></span>Beat 2</div>
+    <h2>{{BEAT2_TITLE}}</h2>
+    <p>{{BEAT2_TEXT}}</p>
+    <figure><svg viewBox="0 0 640 260" role="img" aria-label="{{BEAT2_FIG_ALT}}"><!-- {{BEAT2_FIG}}: the same figure every level, more detailed each time --></svg><figcaption>{{BEAT2_CAPTION}}</figcaption></figure>
+    <div class="panel"><div class="panel-h">{{BEAT2_PANEL_LABEL}}</div><div id="eli5-w2"><!-- {{BEAT2_WIDGET}}: built by the TOPIC WIDGETS script; delete this panel if the beat has none --></div></div>
+    <p class="bridge">{{BEAT2_BRIDGE}}</p>
+  </article>
+  <!-- Repeat the beat block for every beat in the spine: same ids (after the prefix), same titles, same order on all five levels. -->
+
+  <section class="test" data-lv="0" aria-label="Level test">
+    <h2>Level test</h2>
+    <p>One question per beat. Get each one right to unlock the next level.</p>
+    <div class="prog"><i></i></div>
+
+    <div class="tq" data-beat="eli5-{{BEAT1_ID}}">
+      <p class="q">{{Q1}}</p>
+      <div class="opts">
+        <button data-why="{{Q1_WRONG1_WHY}}">{{Q1_WRONG1}}</button>
+        <button data-ok data-why="{{Q1_RIGHT_WHY}}">{{Q1_RIGHT}}</button>
+        <button data-why="{{Q1_WRONG2_WHY}}">{{Q1_WRONG2}}</button>
+      </div>
+      <p class="fb" hidden></p>
+    </div>
+    <div class="tq" data-beat="eli5-{{BEAT2_ID}}">
+      <p class="q">{{Q2}}</p>
+      <div class="opts">
+        <button data-why="{{Q2_WRONG1_WHY}}">{{Q2_WRONG1}}</button>
+        <button data-ok data-why="{{Q2_RIGHT_WHY}}">{{Q2_RIGHT}}</button>
+        <button data-why="{{Q2_WRONG2_WHY}}">{{Q2_WRONG2}}</button>
+      </div>
+      <p class="fb" hidden></p>
+    </div>
+    <!-- One question per beat, in beat order. Formats: multiple choice (above), number (data-answer, data-tol), open (ELIA only), or a custom widget inside a .tq that calls FL.done(thatTq) when solved. -->
+
+    <div class="pass" hidden><p>🎉 Level passed. {{ELIT_TEASER}}</p><button class="btn" data-go="1">Enter ELIT →</button></div>
+  </section>
+</section>
+
+<!-- ================= LEVEL 1: ELIT (teenager) ================= -->
+<section class="page" data-lv="1" role="tabpanel" hidden>
+  <p class="hook">{{ELIT_HOOK}}</p>
+
+  <article class="beat" id="elit-{{BEAT1_ID}}">
+    <div class="beat-h"><span class="dots"></span>Beat 1</div>
+    <h2>{{BEAT1_TITLE}}</h2>
+    <p>{{BEAT1_TEXT}}</p>
+    <figure><svg viewBox="0 0 640 260" role="img" aria-label="{{BEAT1_FIG_ALT}}"><!-- {{BEAT1_FIG}}: the same figure every level, more detailed each time --></svg><figcaption>{{BEAT1_CAPTION}}</figcaption></figure>
+    <div class="panel"><div class="panel-h">{{BEAT1_PANEL_LABEL}}</div><div id="elit-w1"><!-- {{BEAT1_WIDGET}}: built by the TOPIC WIDGETS script; delete this panel if the beat has none --></div></div>
+    <p class="bridge">{{BEAT1_BRIDGE}}</p>
+  </article>
+  <article class="beat" id="elit-{{BEAT2_ID}}">
+    <div class="beat-h"><span class="dots"></span>Beat 2</div>
+    <h2>{{BEAT2_TITLE}}</h2>
+    <p>{{BEAT2_TEXT}}</p>
+    <figure><svg viewBox="0 0 640 260" role="img" aria-label="{{BEAT2_FIG_ALT}}"><!-- {{BEAT2_FIG}}: the same figure every level, more detailed each time --></svg><figcaption>{{BEAT2_CAPTION}}</figcaption></figure>
+    <div class="panel"><div class="panel-h">{{BEAT2_PANEL_LABEL}}</div><div id="elit-w2"><!-- {{BEAT2_WIDGET}}: built by the TOPIC WIDGETS script; delete this panel if the beat has none --></div></div>
+    <p class="bridge">{{BEAT2_BRIDGE}}</p>
+  </article>
+  <!-- Repeat the beat block for every beat in the spine: same ids (after the prefix), same titles, same order on all five levels. -->
+
+  <section class="test" data-lv="1" aria-label="Level test">
+    <h2>Level test</h2>
+    <p>One question per beat. Get each one right to unlock the next level.</p>
+    <div class="prog"><i></i></div>
+
+    <div class="tq" data-beat="elit-{{BEAT1_ID}}">
+      <p class="q">{{Q1}}</p>
+      <div class="opts">
+        <button data-why="{{Q1_WRONG1_WHY}}">{{Q1_WRONG1}}</button>
+        <button data-ok data-why="{{Q1_RIGHT_WHY}}">{{Q1_RIGHT}}</button>
+        <button data-why="{{Q1_WRONG2_WHY}}">{{Q1_WRONG2}}</button>
+      </div>
+      <p class="fb" hidden></p>
+    </div>
+    <div class="tq" data-beat="elit-{{BEAT2_ID}}">
+      <p class="q">{{Q2}}</p>
+      <div class="opts">
+        <button data-why="{{Q2_WRONG1_WHY}}">{{Q2_WRONG1}}</button>
+        <button data-ok data-why="{{Q2_RIGHT_WHY}}">{{Q2_RIGHT}}</button>
+        <button data-why="{{Q2_WRONG2_WHY}}">{{Q2_WRONG2}}</button>
+      </div>
+      <p class="fb" hidden></p>
+    </div>
+    <!-- One question per beat, in beat order. Formats: multiple choice (above), number (data-answer, data-tol), open (ELIA only), or a custom widget inside a .tq that calls FL.done(thatTq) when solved. -->
+
+    <div class="pass" hidden><p>🎉 Level passed. {{ELIC_TEASER}}</p><button class="btn" data-go="2">Enter ELIC →</button></div>
+  </section>
+</section>
+
+<!-- ================= LEVEL 2: ELIC (college) ================= -->
+<section class="page" data-lv="2" role="tabpanel" hidden>
+  <p class="hook">{{ELIC_HOOK}}</p>
+
+  <article class="beat" id="elic-{{BEAT1_ID}}">
+    <div class="beat-h"><span class="dots"></span>Beat 1</div>
+    <h2>{{BEAT1_TITLE}}</h2>
+    <p>{{BEAT1_TEXT}}</p>
+    <div class="math-d">\[ {{BEAT1_EQUATION}} \]</div>
+    <figure><svg viewBox="0 0 640 260" role="img" aria-label="{{BEAT1_FIG_ALT}}"><!-- {{BEAT1_FIG}}: the same figure every level, more detailed each time --></svg><figcaption>{{BEAT1_CAPTION}}</figcaption></figure>
+    <div class="panel"><div class="panel-h">{{BEAT1_PANEL_LABEL}}</div><div id="elic-w1"><!-- {{BEAT1_WIDGET}}: built by the TOPIC WIDGETS script; delete this panel if the beat has none --></div></div>
+    <p class="bridge">{{BEAT1_BRIDGE}}</p>
+  </article>
+  <article class="beat" id="elic-{{BEAT2_ID}}">
+    <div class="beat-h"><span class="dots"></span>Beat 2</div>
+    <h2>{{BEAT2_TITLE}}</h2>
+    <p>{{BEAT2_TEXT}}</p>
+    <figure><svg viewBox="0 0 640 260" role="img" aria-label="{{BEAT2_FIG_ALT}}"><!-- {{BEAT2_FIG}}: the same figure every level, more detailed each time --></svg><figcaption>{{BEAT2_CAPTION}}</figcaption></figure>
+    <div class="panel"><div class="panel-h">{{BEAT2_PANEL_LABEL}}</div><div id="elic-w2"><!-- {{BEAT2_WIDGET}}: built by the TOPIC WIDGETS script; delete this panel if the beat has none --></div></div>
+    <p class="bridge">{{BEAT2_BRIDGE}}</p>
+  </article>
+  <!-- Repeat the beat block for every beat in the spine: same ids (after the prefix), same titles, same order on all five levels. -->
+
+  <section class="test" data-lv="2" aria-label="Level test">
+    <h2>Level test</h2>
+    <p>One question per beat. Get each one right to unlock the next level.</p>
+    <div class="prog"><i></i></div>
+
+    <div class="tq" data-beat="elic-{{BEAT1_ID}}" data-answer="{{Q1_ANSWER}}" data-tol="0.05" data-why="{{Q1_HINT}}">
+      <p class="q">{{Q1}}</p>
+      <input type="text" inputmode="decimal" aria-label="Answer"><button class="check">Check</button>
+      <p class="fb" hidden></p>
+    </div>
+    <div class="tq" data-beat="elic-{{BEAT2_ID}}">
+      <p class="q">{{Q2}}</p>
+      <div class="opts">
+        <button data-why="{{Q2_WRONG1_WHY}}">{{Q2_WRONG1}}</button>
+        <button data-ok data-why="{{Q2_RIGHT_WHY}}">{{Q2_RIGHT}}</button>
+        <button data-why="{{Q2_WRONG2_WHY}}">{{Q2_WRONG2}}</button>
+      </div>
+      <p class="fb" hidden></p>
+    </div>
+    <!-- One question per beat, in beat order. Formats: multiple choice (above), number (data-answer, data-tol), open (ELIA only), or a custom widget inside a .tq that calls FL.done(thatTq) when solved. -->
+
+    <div class="pass" hidden><p>🎉 Level passed. {{ELIP_TEASER}}</p><button class="btn" data-go="3">Enter ELIP →</button></div>
+  </section>
+</section>
+
+<!-- ================= LEVEL 3: ELIP (PhD) ================= -->
+<section class="page" data-lv="3" role="tabpanel" hidden>
+  <p class="hook">{{ELIP_HOOK}}</p>
+
+  <article class="beat" id="elip-{{BEAT1_ID}}">
+    <div class="beat-h"><span class="dots"></span>Beat 1</div>
+    <h2>{{BEAT1_TITLE}}</h2>
+    <p>{{BEAT1_TEXT}}</p>
+    <div class="math-d">\[ {{BEAT1_EQUATION}} \]</div>
+    <figure><svg viewBox="0 0 640 260" role="img" aria-label="{{BEAT1_FIG_ALT}}"><!-- {{BEAT1_FIG}}: the same figure every level, more detailed each time --></svg><figcaption>{{BEAT1_CAPTION}}</figcaption></figure>
+    <div class="panel"><div class="panel-h">{{BEAT1_PANEL_LABEL}}</div><div id="elip-w1"><!-- {{BEAT1_WIDGET}}: built by the TOPIC WIDGETS script; delete this panel if the beat has none --></div></div>
+    <p class="bridge">{{BEAT1_BRIDGE}}</p>
+  </article>
+  <article class="beat" id="elip-{{BEAT2_ID}}">
+    <div class="beat-h"><span class="dots"></span>Beat 2</div>
+    <h2>{{BEAT2_TITLE}}</h2>
+    <p>{{BEAT2_TEXT}}</p>
+    <figure><svg viewBox="0 0 640 260" role="img" aria-label="{{BEAT2_FIG_ALT}}"><!-- {{BEAT2_FIG}}: the same figure every level, more detailed each time --></svg><figcaption>{{BEAT2_CAPTION}}</figcaption></figure>
+    <div class="panel"><div class="panel-h">{{BEAT2_PANEL_LABEL}}</div><div id="elip-w2"><!-- {{BEAT2_WIDGET}}: built by the TOPIC WIDGETS script; delete this panel if the beat has none --></div></div>
+    <p class="bridge">{{BEAT2_BRIDGE}}</p>
+  </article>
+  <!-- Repeat the beat block for every beat in the spine: same ids (after the prefix), same titles, same order on all five levels. -->
+
+  <article class="beat" id="elip-recipe">
+    <div class="beat-h"><span class="dots"></span>Extra</div>
+    <h2>Replication recipe</h2>
+    <p>{{RECIPE_INTRO}}</p>
+    <h3>Setup and notation</h3><p>{{RECIPE_SETUP}}</p>
+    <h3>Algorithm</h3><pre>{{RECIPE_PSEUDOCODE}}</pre>
+    <h3>Hyperparameters and data</h3><div class="tw"><table><tr><th>Item</th><th>Value</th><th>Source</th></tr><tr><td>{{ITEM}}</td><td>{{VALUE}}</td><td>{{PAPER_SECTION_OR_INFERRED}}</td></tr></table></div>
+    <h3>Evaluation and expected numbers</h3><p>{{RECIPE_EVAL}}</p>
+    <h3>Pitfalls and what the paper leaves out</h3><ul><li>{{PITFALL}}</li></ul>
+    <h3>References</h3><ol><li>{{REFERENCE}}</li></ol>
+  </article>
+
+  <section class="test" data-lv="3" aria-label="Level test">
+    <h2>Level test</h2>
+    <p>One question per beat. Get each one right to unlock the next level.</p>
+    <div class="prog"><i></i></div>
+
+    <div class="tq" data-beat="elip-{{BEAT1_ID}}" data-answer="{{Q1_ANSWER}}" data-tol="0.05" data-why="{{Q1_HINT}}">
+      <p class="q">{{Q1}}</p>
+      <input type="text" inputmode="decimal" aria-label="Answer"><button class="check">Check</button>
+      <p class="fb" hidden></p>
+    </div>
+    <div class="tq" data-beat="elip-{{BEAT2_ID}}">
+      <p class="q">{{Q2}}</p>
+      <div class="opts">
+        <button data-why="{{Q2_WRONG1_WHY}}">{{Q2_WRONG1}}</button>
+        <button data-ok data-why="{{Q2_RIGHT_WHY}}">{{Q2_RIGHT}}</button>
+        <button data-why="{{Q2_WRONG2_WHY}}">{{Q2_WRONG2}}</button>
+      </div>
+      <p class="fb" hidden></p>
+    </div>
+    <!-- One question per beat, in beat order. Formats: multiple choice (above), number (data-answer, data-tol), open (ELIA only), or a custom widget inside a .tq that calls FL.done(thatTq) when solved. -->
+
+    <div class="pass" hidden><p>🎉 Level passed. {{ELIA_TEASER}}</p><button class="btn" data-go="4">Enter ELIA →</button></div>
+  </section>
+</section>
+
+<!-- ================= LEVEL 4: ELIA (ascended) ================= -->
+<section class="page" data-lv="4" role="tabpanel" hidden>
+  <p class="hook">{{ELIA_HOOK}}</p>
+
+  <article class="beat" id="elia-{{BEAT1_ID}}">
+    <div class="beat-h"><span class="dots"></span>Beat 1</div>
+    <h2>{{BEAT1_TITLE}}</h2>
+    <p>{{BEAT1_TEXT}}</p>
+    <figure><svg viewBox="0 0 640 260" role="img" aria-label="{{BEAT1_FIG_ALT}}"><!-- {{BEAT1_FIG}}: the same figure every level, more detailed each time --></svg><figcaption>{{BEAT1_CAPTION}}</figcaption></figure>
+    <div class="panel"><div class="panel-h">{{BEAT1_PANEL_LABEL}}</div><div id="elia-w1"><!-- {{BEAT1_WIDGET}}: built by the TOPIC WIDGETS script; delete this panel if the beat has none --></div></div>
+    <p class="bridge">{{BEAT1_BRIDGE}}</p>
+  </article>
+  <article class="beat" id="elia-{{BEAT2_ID}}">
+    <div class="beat-h"><span class="dots"></span>Beat 2</div>
+    <h2>{{BEAT2_TITLE}}</h2>
+    <p>{{BEAT2_TEXT}}</p>
+    <figure><svg viewBox="0 0 640 260" role="img" aria-label="{{BEAT2_FIG_ALT}}"><!-- {{BEAT2_FIG}}: the same figure every level, more detailed each time --></svg><figcaption>{{BEAT2_CAPTION}}</figcaption></figure>
+    <div class="panel"><div class="panel-h">{{BEAT2_PANEL_LABEL}}</div><div id="elia-w2"><!-- {{BEAT2_WIDGET}}: built by the TOPIC WIDGETS script; delete this panel if the beat has none --></div></div>
+    <p class="bridge">{{BEAT2_BRIDGE}}</p>
+  </article>
+  <!-- Repeat the beat block for every beat in the spine: same ids (after the prefix), same titles, same order on all five levels. -->
+
+  <article class="beat" id="elia-sentence">
+    <div class="beat-h"><span class="dots"></span>Last</div>
+    <h2>The one sentence</h2>
+    <p style="font-family:var(--serif);font-size:clamp(1.35rem,4vw,1.8rem);line-height:1.35;text-align:center;margin:8px 0">{{ONE_SENTENCE}}</p>
+  </article>
+
+  <section class="test" data-lv="4" aria-label="Capstone">
+    <h2>Capstone</h2>
+    <p>Connect the patterns. Write your answer, then compare it with the model answer.</p>
+    <div class="prog"><i></i></div>
+
+    <div class="tq open" data-beat="elia-{{BEAT1_ID}}">
+      <p class="q">{{Q1}}</p>
+      <textarea rows="3" aria-label="Your answer"></textarea><button class="check">Show model answer</button>
+      <div class="fb" hidden>{{Q1_MODEL_ANSWER}}</div>
+    </div>
+    <div class="tq open" data-beat="elia-{{BEAT2_ID}}">
+      <p class="q">{{Q2}}</p>
+      <textarea rows="3" aria-label="Your answer"></textarea><button class="check">Show model answer</button>
+      <div class="fb" hidden>{{Q2_MODEL_ANSWER}}</div>
+    </div>
+    <!-- One question per beat, in beat order. Formats: multiple choice (above), number (data-answer, data-tol), open (ELIA only), or a custom widget inside a .tq that calls FL.done(thatTq) when solved. -->
+
+    <div class="pass" hidden><p>🎉 {{COMPLETION_MESSAGE}}</p><button class="btn" data-go="0">Back to ELI5 →</button></div>
+  </section>
+</section>
+  </main>
+</div>
+
+<script>
+/* ===== SHELL SCRIPT: tabs, locking, tests. KEEP. Put topic widgets in a separate <script> below. ===== */
+const FL=(()=>{
+  const KEY='five-levels:'+document.title;
+  const tabs=[...document.querySelectorAll('.tab')], pages=[...document.querySelectorAll('.page')];
+  let st={passed:[],tab:0};
+  try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&Array.isArray(s.passed))st={passed:s.passed,tab:+s.tab||0};}catch(e){}
+  const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}};
+  const open=i=>i===0||st.passed.includes(i-1);
+
+  function show(i){
+    if(!(i>=0&&i<pages.length)||!open(i))i=0;
+    tabs.forEach((t,j)=>{t.disabled=!open(j);t.setAttribute('aria-selected',String(j===i));});
+    pages.forEach((p,j)=>{if(j!==i)stopVideos(p);p.hidden=j!==i;});
+    st.tab=i;save();
+    window.scrollTo(0,0);
+  }
+  tabs.forEach((t,i)=>t.addEventListener('click',()=>show(i)));
+  document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g)show(+g.dataset.go);});
+
+  // youtube cards: thumbnail → inline player over http(s); new tab from file:// (YouTube blocks file:// embeds, Error 153)
+  function ytThumb(f){
+    const b=document.createElement('button');b.className='yt-thumb';b.type='button';
+    b.setAttribute('aria-label','Play video: '+(f.querySelector('b')?.textContent||'YouTube'));
+    b.innerHTML=`<img src="https://img.youtube.com/vi/${f.dataset.id}/hqdefault.jpg" alt="" loading="lazy"><span class="yt-play">▶</span>`;
+    return b;
+  }
+  document.querySelectorAll('.yt').forEach(f=>f.prepend(ytThumb(f)));
+  document.addEventListener('click',e=>{
+    const b=e.target.closest('.yt-thumb');if(!b)return;
+    const f=b.closest('.yt'),id=f.dataset.id,t=parseInt(f.dataset.start)||0;
+    if(location.protocol.startsWith('http')){
+      const fr=document.createElement('iframe');
+      fr.src=`https://www.youtube-nocookie.com/embed/${id}?autoplay=1&start=${t}`;
+      fr.allow='autoplay; encrypted-media; picture-in-picture';fr.allowFullscreen=true;
+      fr.referrerPolicy='strict-origin-when-cross-origin';fr.title=b.getAttribute('aria-label');
+      b.replaceWith(fr);
+    }else window.open(`https://www.youtube.com/watch?v=${id}&t=${t}s`,'_blank','noopener');
+  });
+  const stopVideos=p=>p.querySelectorAll('.yt iframe').forEach(fr=>fr.replaceWith(ytThumb(fr.closest('.yt'))));
+
+  // depth dots
+  pages.forEach(p=>{const lv=+p.dataset.lv;p.querySelectorAll('.dots').forEach(d=>{d.innerHTML=[0,1,2,3,4].map(k=>`<i class="${k<=lv?'on':''}"></i>`).join('');d.setAttribute('aria-label',`Depth ${lv+1} of 5`);});});
+
+  // tests
+  function update(test){
+    const qs=[...test.querySelectorAll('.tq')], n=qs.filter(q=>q.classList.contains('done')).length;
+    test.querySelector('.prog i').style.width=(qs.length?100*n/qs.length:0)+'%';
+    if(n===qs.length&&qs.length){
+      const lv=+test.dataset.lv;
+      if(!st.passed.includes(lv)){st.passed.push(lv);save();}
+      test.querySelector('.pass').hidden=false;
+      tabs.forEach((t,j)=>{t.disabled=!open(j);});
+    }
+  }
+  function feedback(q,html,ok){
+    const fb=q.querySelector('.fb');
+    const beat=q.dataset.beat;
+    fb.innerHTML=html+(!ok&&beat?` <a href="#${beat}">Revisit this beat ↑</a>`:'');
+    fb.hidden=false;
+    if(window.MathJax&&MathJax.typesetPromise)MathJax.typesetPromise([fb]);
+  }
+  function done(q){
+    q.classList.add('done');
+    q.querySelectorAll('button,input,textarea').forEach(x=>{x.disabled=true;});
+    update(q.closest('.test'));
+  }
+  document.querySelectorAll('.test .tq').forEach(q=>{
+    const opts=q.querySelectorAll('.opts button');
+    opts.forEach(b=>b.addEventListener('click',()=>{
+      const ok='ok' in b.dataset;
+      b.classList.add(ok?'right':'wrong');
+      if(!ok)b.disabled=true;               // can't pick the same wrong one twice; others stay open
+      feedback(q,b.dataset.why||(ok?'Right.':'Not quite.'),ok);
+      if(ok)done(q);
+    }));
+    const chk=q.querySelector('.check');
+    if(chk)chk.addEventListener('click',()=>{
+      if(q.classList.contains('open')){
+        const t=q.querySelector('textarea');
+        if(t.value.trim().length<10){t.focus();return;}
+        q.querySelector('.fb').hidden=false;done(q);return;
+      }
+      const v=parseFloat(q.querySelector('input').value.replace(/[×x]\s*10\^?/,'e').replace(/\s/g,''));
+      const a=+q.dataset.answer, tol=+(q.dataset.tol||0.05);
+      const ok=isFinite(v)&&Math.abs(v-a)<=Math.abs(a)*tol+1e-12;
+      feedback(q,ok?'Right.':(q.dataset.why||'Not quite. Try again.'),ok);
+      if(ok)done(q);
+    });
+  });
+  // already-passed levels show their pass card
+  document.querySelectorAll('.test').forEach(t=>{if(st.passed.includes(+t.dataset.lv))t.querySelector('.pass').hidden=false;});
+
+  show(st.tab);
+  return {done,show};
+})();
+</script>
+<script>
+/* ===== TOPIC WIDGETS: fill in. Figures, sliders, sims, custom test questions.
+   - Build into the #<prefix>-w<n> slots. One function per widget taking a level (0-4) so the same widget grows with depth.
+   - Size canvases from fixed numbers (e.g. 640x260), never from clientWidth: hidden pages measure 0.
+   - Math added to the DOM later: call MathJax.typesetPromise([el]) if window.MathJax is ready.
+   {{WIDGETS_JS}}
+===== */
+</script>
+</body>
+</html>
